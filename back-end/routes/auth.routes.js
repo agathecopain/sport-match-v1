@@ -8,26 +8,36 @@ import {
   resetPasswordSchema,
 } from "../validation/schemas/user.schema.js";
 import authController from "../controllers/auth.controller.js";
+import {
+  limiter,
+} from "../middlewares/rateLimiter.middleware.js";
 
 const router = express.Router();
 
-router.post("/register", validate(registerSchema), AuthController.register);
+router.post(
+  "/register",
+  validate(registerSchema),
+  limiter(10),
+  AuthController.register
+);
 
 router.get("/verify/:token", AuthController.verifyEmail);
 
-router.post("/login", validate(loginSchema), AuthController.login);
+router.post("/login", validate(loginSchema), limiter(10), AuthController.login);
 
 router.post("/logout", AuthController.logout);
 
 router.post(
   "/password-reset-request",
   validate(passwordResetRequestSchema),
+  limiter(10),
   AuthController.requestPasswordReset
 );
 
 router.post(
   "/reset-password/:token",
   validate(resetPasswordSchema),
+  limiter(10),
   AuthController.resetPassword
 );
 
