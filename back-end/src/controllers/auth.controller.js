@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -66,14 +67,37 @@ class AuthController {
       });
 
       const verificationUrl = `${CLIENT_URL}/auth/verify/${verificationToken}`;
-      await sendEmail({
-        to: newUser.email,
-        subject: "Vérifiez votre compte",
-        html: `Bonjour ${newUser.firstName},<br><br>Merci de vérifier votre compte en cliquant sur ce lien : <a href="${verificationUrl}">Vérifier mon compte</a><br><br>Ce lien est valable 7 jours.`,
-      });
-      res.status(201).json({
-        message: "Utilisateur créé. Un email de vérification a été envoyé.",
-      });
+
+      const fullName = newUser.firstName.concat(" ", newUser.lastName);
+
+      let emailAPI = new TransactionalEmailsApi();
+      emailAPI.authentications.apiKey.apiKey = process.env.SMTP_API_KEY;
+
+      let message = new SendSmtpEmail();
+      message.subject = "Vérifiez votre compte";
+      (message.htmlContent = `Bonjour ${newUser.firstName},<br><br>Merci de vérifier votre compte en cliquant sur ce lien : <a href="${verificationUrl}">Vérifier mon compte</a><br><br>Ce lien est valable 7 jours.`),
+        (message.sender = {
+          name: "Sport Match",
+          email: process.env.GMAIL_USER,
+        });
+      message.to = [
+        {
+          email: newUser.email,
+          name: fullName,
+        },
+      ];
+
+      await emailAPI
+        .sendTransacEmail(message)
+        .then((resAPI) => {
+          console.log(JSON.stringify(resAPI.body));
+          return res.status(201).json({
+            message: "Utilisateur créé. Un email de vérification a été envoyé.",
+          });
+        })
+        .catch((err) => {
+          console.error("Error sending email:", err.body);
+        });
     } catch (error) {
       console.error("Register error : ", error);
       res
@@ -185,22 +209,22 @@ class AuthController {
       const user = await User.findOne({ email });
       if (!user)
         return res.status(404).json({ message: "Utilisateur non trouvé." });
-   
+
       const resetToken = crypto.randomBytes(32).toString("hex");
-    
+
       const resetTokenHashed = crypto
         .createHash("sha256")
         .update(resetToken)
         .digest("hex");
 
       user.resetPasswordToken = resetTokenHashed;
-     
+
       user.resetPasswordExpire = Date.now() + 3600000; // 1h en ms
-    
+
       await user.save();
 
       const resetUrl = `${CLIENT_URL}/auth/reset-password/${resetToken}`;
-   
+
       await sendEmail({
         to: user.email,
         subject: "Réinitialisation du mot de passe",
