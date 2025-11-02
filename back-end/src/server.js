@@ -5,6 +5,7 @@ import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import authRoutes from "./routes/auth.routes.js";
+import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
 
