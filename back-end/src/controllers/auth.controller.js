@@ -66,7 +66,7 @@ class AuthController {
         expiresIn: "7d",
       });
 
-      const verificationUrl = `${CLIENT_URL}/auth/verify/${verificationToken}`;
+      const verificationUrl = `${CLIENT_URL}auth/verify/${verificationToken}`;
 
       const fullName = newUser.firstName.concat(" ", newUser.lastName);
 
