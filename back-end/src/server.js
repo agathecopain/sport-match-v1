@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5050;
 const app = express();
 
 connectDB();
-
+app.set('trust proxy', 1); 
 app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
