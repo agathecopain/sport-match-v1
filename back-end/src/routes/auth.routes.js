@@ -7,7 +7,6 @@ import {
   registerSchema,
   resetPasswordSchema,
 } from "../validation/schemas/user.schema.js";
-import authController from "../controllers/auth.controller.js";
 import {
   limiter,
 } from "../middlewares/rateLimiter.middleware.js";

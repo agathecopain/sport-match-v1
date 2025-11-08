@@ -8,7 +8,6 @@ const sportsEnum = [
   "art du cirque",
   "arts martiaux",
   "athlétisme",
-  "athlétisme",
   "aviron",
   "badminton",
   "baseball",
