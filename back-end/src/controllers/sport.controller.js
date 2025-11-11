@@ -10,7 +10,10 @@ class SportController {
           .status(400)
           .json({ message: "Tous les champs sont obligatoires" });
       }
-      const sportExists = await Sport.findOne({ name });
+      const sportExists = await Sport.findOne({ name }).collation({
+        locale: "fr",
+        strength: 1,
+      });
       if (sportExists) {
         return res.status(400).json({ message: "Sport déjà créé." });
       }
@@ -32,14 +35,14 @@ class SportController {
       const sportExists = await Sport.findOne({
         name: req.body.name,
         _id: { $ne: req.params.id }, // opérateur + not equal
-      });
+      }).collation({ locale: "fr", strength: 1 });
       if (sportExists) {
         return res.status(400).json({ message: "Sport déjà créé." });
       }
 
-      const sport = await Sport.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
+      const sport = await Sport.findByIdAndUpdate(
+        req.params.id,
+        { name: req.body.name },
         { new: true }
       );
 
@@ -59,12 +62,12 @@ class SportController {
   async deleteSport(req, res) {
     // suppression d'un sport
     try {
-      const sport = await Sport.findOneAndDelete({ _id: req.params.id });
+      const sport = await Sport.findByIdAndDelete(req.params.id);
 
       if (!sport) {
         return res.status(404).json({ message: "Aucun sport trouvé." });
       }
-      res.status(200).json("Sport supprimé.");
+      res.status(200).json({ message: "Sport supprimé." });
     } catch (error) {
       console.error("Delete sport error : ", error);
       res.status(500).json({ message: "Impossible de supprimer le sport." });
@@ -78,9 +81,10 @@ class SportController {
         .collation({ locale: "fr", strength: 1 })
         .sort({ name: 1 });
 
-      if (!sports) {
+      if (sports.length === 0) {
         return res.status(404).json({ message: "Aucun sport trouvé." });
       }
+
       res.status(200).json(sports);
     } catch (error) {
       console.error("GetAll sport error : ", error);
@@ -91,14 +95,14 @@ class SportController {
   async getSportById(req, res) {
     // afficher un sport avec son id
     try {
-      const sport = await Sport.findById({ _id: req.params.id });
+      const sport = await Sport.findById(req.params.id);
 
       if (!sport) {
         return res.status(404).json({ message: "Aucun sport trouvé." });
       }
       res.status(200).json(sport);
     } catch (error) {
-      console.error("GetAll sport error : ", error);
+      console.error("GetById sport error : ", error);
       res.status(500).json({ message: "Impossible d'afficher le sport" });
     }
   }

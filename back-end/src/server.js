@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import authRoutes from "./routes/auth.routes.js";
 import sportRoutes from "./routes/sport.routes.js";
+import postRoutes from "./routes/post.routes.js";
 import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/sport", sportRoutes);
+app.use("/post", postRoutes);
 
 app.get("/", (req, res) => {
   res.send("Vérification de mise en place du serveur");

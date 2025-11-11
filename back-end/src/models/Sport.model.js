@@ -9,6 +9,9 @@ const sportSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    iconeUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

@@ -1,10 +1,6 @@
 import express from "express";
 import SportController from "../controllers/sport.controller.js";
-import {
-  protect,
-  requireRole,
-  requireRoles,
-} from "../middlewares/auth.middleware.js";
+import { protect, requireRole } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import { sportSchema } from "../validation/schemas/sport.schema.js";
 
