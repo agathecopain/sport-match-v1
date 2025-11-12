@@ -5,14 +5,25 @@ import {
   requireRole,
   requireRoles,
 } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validation.middleware.js";
+import {
+  createPostSchema,
+  updatePostSchema,
+} from "../validation/schemas/post.schema.js";
 
 const router = express.Router();
 
-router.post("/create", protect, PostController.createPost);
+router.post(
+  "/create",
+  protect,
+  validate(createPostSchema),
+  PostController.createPost
+);
 router.post(
   "/edit/:id",
   protect,
   requireRoles("user", "admin"),
+  validate(updatePostSchema),
   PostController.updatePost
 );
 router.post(
@@ -29,5 +40,7 @@ router.post(
 );
 router.get("/:id", PostController.getPostById);
 router.get("/", PostController.getPosts);
+
+router.get("/api/city", PostController.getCity);
 
 export default router;

@@ -155,7 +155,6 @@ class PostController {
       const { sportId, gender, level, locationCity, locationPC, title } =
         req.query;
       const whereConditions = {};
-      console.log(sportId);
       if (sportId) {
         whereConditions.sport = sportId;
       }
@@ -174,7 +173,9 @@ class PostController {
       if (title) {
         whereConditions.title = title;
       }
-      const posts = await Post.find(whereConditions).populate('sport');
+      const posts = await Post.find(whereConditions)
+        .populate("author", { username: 1, avatar: 1 })
+        .populate("sport");
       res.status(200).json(posts);
     } catch (error) {
       console.error("Get posts error : ", error);
@@ -183,7 +184,9 @@ class PostController {
   }
   async getPostById(req, res) {
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await Post.findById(req.params.id)
+        .populate("author", { username: 1, avatar: 1 })
+        .populate("sport");
       if (!post) {
         return res
           .status(404)
@@ -193,6 +196,35 @@ class PostController {
     } catch (error) {
       console.error("GetById post error : ", error);
       res.status(500).json({ message: "Impossible d'afficher le post" });
+    }
+  }
+  async getCity(req, res) {
+    try {
+      const { q } = req.query;
+      let api_url =
+        "https://datanova.laposte.fr/data-fair/api/v1/datasets/laposte-hexasmal/lines";
+      if (q) {
+        api_url += `?q=${encodeURIComponent(q)}`;
+      }
+
+      const response = await fetch(api_url);
+      if (!response.ok) {
+        throw new Error(`Erreur API :${response.status}`);
+      }
+
+      const data = await response.json();
+      const city = data.results.map((r) => r.nom_de_la_commune);
+      res.status(200).json(city);
+    } catch (error) {
+      console.error("API city error : ", error);
+      res.status(500).json({ message: "Impossible de récupérer les données." });
+    }
+  }
+  async getPostCode(req, res) {
+    try {
+    } catch (error) {
+      console.error("API city error : ", error);
+      res.status(500).json({ message: "Impossible de récupérer les données." });
     }
   }
 }

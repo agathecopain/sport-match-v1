@@ -17,6 +17,7 @@ class AuthController {
         lastName,
         gender,
         email,
+        username,
         password,
         confirmPassword,
         role,
@@ -28,6 +29,7 @@ class AuthController {
         !lastName ||
         !gender ||
         !email ||
+        !username ||
         !password ||
         !confirmPassword
       ) {
@@ -54,6 +56,7 @@ class AuthController {
         lastName,
         gender,
         email,
+        username,
         password: hashedpassword,
         role: role || "user",
         avatar,
