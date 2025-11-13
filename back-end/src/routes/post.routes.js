@@ -42,5 +42,6 @@ router.get("/:id", PostController.getPostById);
 router.get("/", PostController.getPosts);
 
 router.get("/api/city", PostController.getCity);
+router.get("/api/post-code", PostController.getPostCode);
 
 export default router;

@@ -201,6 +201,7 @@ class PostController {
   async getCity(req, res) {
     try {
       const { q } = req.query;
+
       let api_url =
         "https://datanova.laposte.fr/data-fair/api/v1/datasets/laposte-hexasmal/lines";
       if (q) {
@@ -222,8 +223,24 @@ class PostController {
   }
   async getPostCode(req, res) {
     try {
+      const { q } = req.query;
+
+      let api_url =
+        "https://datanova.laposte.fr/data-fair/api/v1/datasets/laposte-hexasmal/lines";
+      if (q) {
+        api_url += `?q=${encodeURIComponent(q)}`;
+      }
+
+      const response = await fetch(api_url);
+      if (!response.ok) {
+        throw new Error(`Erreur API :${response.status}`);
+      }
+
+      const data = await response.json();
+      const postCode = data.results.map((r) => r.code_postal);
+      res.status(200).json(postCode);
     } catch (error) {
-      console.error("API city error : ", error);
+      console.error("API postCode error : ", error);
       res.status(500).json({ message: "Impossible de récupérer les données." });
     }
   }
