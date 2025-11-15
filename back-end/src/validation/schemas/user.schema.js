@@ -38,6 +38,7 @@ export const registerSchema = Joi.object({
     "string.empty": "Le nom est requis.",
     "string.min": "Le nom doit contenir au moins 2 caractères.",
   }),
+  username: usernameSchema,
   gender: Joi.string().required().messages({
     "string.empty": "le genre est requis.",
   }),
@@ -56,7 +57,7 @@ export const loginSchema = Joi.object({
 
 //Schema demande de changement de mot de passe
 export const passwordResetRequestSchema = Joi.object({
-  email: emailSchema
+  email: emailSchema,
 });
 
 //Schema changement de mot de passe

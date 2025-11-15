@@ -7,14 +7,14 @@ import {
   registerSchema,
   resetPasswordSchema,
 } from "../validation/schemas/user.schema.js";
-import {
-  limiter,
-} from "../middlewares/rateLimiter.middleware.js";
+import { limiter } from "../middlewares/rateLimiter.middleware.js";
+import { uploadAvatar } from "../middlewares/upload.js";
 
 const router = express.Router();
 
 router.post(
   "/register",
+  uploadAvatar.single("avatar"),
   validate(registerSchema),
   limiter(10),
   AuthController.register

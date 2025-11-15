@@ -5,6 +5,8 @@ class SportController {
     // création d'un sport
     try {
       const { name } = req.body;
+      const iconeUrl = req.file?.path || "";
+
       if (!name) {
         return res
           .status(400)
@@ -19,6 +21,7 @@ class SportController {
       }
       const newSport = new Sport({
         name,
+        iconeUrl,
       });
       await newSport.save();
       res.status(201).json({ message: "Sport créé." });
@@ -40,11 +43,18 @@ class SportController {
         return res.status(400).json({ message: "Sport déjà créé." });
       }
 
-      const sport = await Sport.findByIdAndUpdate(
-        req.params.id,
-        { name: req.body.name },
-        { new: true }
-      );
+      const value = {};
+
+      if (req.body.name !== undefined) {
+        value.name = req.body.name;
+      }
+      if (req.file) {
+        value.iconeUrl = req.file?.path;
+      }
+
+      const sport = await Sport.findByIdAndUpdate(req.params.id, value, {
+        new: true,
+      });
 
       if (!sport) {
         return res.status(404).json({ message: "Aucun sport trouvé." });
