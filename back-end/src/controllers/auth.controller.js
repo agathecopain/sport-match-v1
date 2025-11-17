@@ -138,6 +138,11 @@ class AuthController {
       if (!email || !password)
         return res.status(400).json({ message: "Les champs sont requis." });
 
+      if (typeof email !== "string" || typeof password !== "string")
+        return res
+          .status(400)
+          .json({ message: "Les champs ne sont pas valides." });
+
       const user = await User.findOne({ email });
       if (!user)
         return res.status(400).json({ message: "Utilisateur non trouvé." });

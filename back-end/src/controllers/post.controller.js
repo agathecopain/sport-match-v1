@@ -154,6 +154,19 @@ class PostController {
     try {
       const { sportId, gender, level, locationCity, locationPC, title } =
         req.query;
+
+      if (
+        typeof sportId !== "string" ||
+        typeof gender !== "string" ||
+        typeof level !== "string" ||
+        typeof locationCity !== "string" ||
+        typeof locationPC !== "string" ||
+        typeof title !== "string"
+      )
+        return res
+          .status(400)
+          .json({ message: "Les champs ne sont pas valides." });
+
       const whereConditions = {};
       if (sportId) {
         whereConditions.sport = sportId;

@@ -10,17 +10,21 @@ import {
   createPostSchema,
   updatePostSchema,
 } from "../validation/schemas/post.schema.js";
+import csurf from "csurf";
 
 const router = express.Router();
+const csrfProtection = csurf({ cookie: true });
 
 router.post(
   "/create",
+  csrfProtection,
   protect,
   validate(createPostSchema),
   PostController.createPost
 );
 router.post(
   "/edit/:id",
+  csrfProtection,
   protect,
   requireRoles("user", "admin"),
   validate(updatePostSchema),
@@ -28,12 +32,14 @@ router.post(
 );
 router.post(
   "/delete/:id",
+  csrfProtection,
   protect,
   requireRoles("user", "admin"),
   PostController.deletePost
 );
 router.post(
   "/:id/suspend",
+  csrfProtection,
   protect,
   requireRole("admin"),
   PostController.suspendPost

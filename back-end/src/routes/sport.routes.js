@@ -7,11 +7,14 @@ import {
   sportUpdateSchema,
 } from "../validation/schemas/sport.schema.js";
 import { uploadSportIcon } from "../middlewares/upload.js";
+import csurf from "csurf";
 
 const router = express.Router();
+const csrfProtection = csurf({ cookie: true });
 
 router.post(
   "/create",
+  csrfProtection,
   protect,
   requireRole("admin"),
   uploadSportIcon.single("iconeUrl"),
@@ -20,6 +23,7 @@ router.post(
 );
 router.post(
   "/edit/:id",
+  csrfProtection,
   protect,
   requireRole("admin"),
   uploadSportIcon.single("iconeUrl"),
@@ -28,6 +32,7 @@ router.post(
 );
 router.post(
   "/delete/:id",
+  csrfProtection,
   protect,
   requireRole("admin"),
   SportController.deleteSport

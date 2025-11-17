@@ -7,6 +7,8 @@ import helmet from "helmet";
 import authRoutes from "./routes/auth.routes.js";
 import sportRoutes from "./routes/sport.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import csurf from "csurf";
+import mongoSanitize from "express-mongo-sanitize";
 import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
@@ -19,6 +21,19 @@ app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(mongoSanitize());
+
+const csrfProtection = csurf({
+  cookie: {
+    httpOnly: true,
+    sameSite: "Strict",
+    secure: process.env.NODE_ENV === "production",
+  },
+});
+
+app.get("/csrf-token", csrfProtection, (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 app.use("/auth", authRoutes);
 app.use("/sport", sportRoutes);

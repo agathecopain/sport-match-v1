@@ -1,5 +1,8 @@
 import Joi from "joi";
 
+const rolesEnum = ["admin", "user", "moderator"];
+const gendersEnum = ["femme", "homme", "autre"];
+
 export const usernameSchema = Joi.string().min(3).max(30).required().messages({
   "string.base": "Le pseudo doit être une chaîne de caractères.",
   "string.empty": "Le pseudo est requis",
@@ -39,14 +42,23 @@ export const registerSchema = Joi.object({
     "string.min": "Le nom doit contenir au moins 2 caractères.",
   }),
   username: usernameSchema,
-  gender: Joi.string().required().messages({
-    "string.empty": "le genre est requis.",
-  }),
+  gender: Joi.string()
+    .valid(...gendersEnum)
+    .required()
+    .messages({
+      "string.empty": "le genre est requis.",
+    }),
   email: emailSchema,
   password: passwordSchema,
   confirmPassword: Joi.valid(Joi.ref("password")).required().messages({
     "any.only": "Les mots de passe ne correspondent pas.",
   }),
+  role: Joi.string()
+    .valid(...rolesEnum)
+    .required()
+    .messages({
+      "string.empty": "le role est requis.",
+    }),
 });
 
 //Schema connexion utilisateur
