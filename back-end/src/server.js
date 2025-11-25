@@ -12,29 +12,34 @@ import mongoSanitize from "express-mongo-sanitize";
 import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
-
 const app = express();
 
 connectDB();
 
 app.use(express.json());
-app.use(helmet());
+
+/*---- Sécurité ----*/
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use((req, _res, next) => {
+	Object.defineProperty(req, 'query', {
+		...Object.getOwnPropertyDescriptor(req, 'query'),
+		value: req.query,
+		writable: true,
+	})
+
+	next()
+})
 app.use(mongoSanitize());
 
-const csrfProtection = csurf({
-  cookie: {
-    httpOnly: true,
-    sameSite: "Strict",
-    secure: process.env.NODE_ENV === "production",
-  },
-});
-
-app.get("/csrf-token", csrfProtection, (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
-
+/*---- Routes ----*/
 app.use("/auth", authRoutes);
 app.use("/sport", sportRoutes);
 app.use("/post", postRoutes);
@@ -43,7 +48,8 @@ app.get("/", (req, res) => {
   res.send("Vérification de mise en place du serveur");
 });
 
-app.listen(PORT, () => {
+/*---- Server ----*/
+const server = app.listen(PORT, () => {
   console.log(`le serveur tourne sur : http://localhost:${PORT}`);
 });
 

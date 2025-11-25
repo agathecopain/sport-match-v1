@@ -20,7 +20,6 @@ class AuthController {
         username,
         password,
         confirmPassword,
-        role,
       } = req.body;
       const avatar = req.file?.path || "";
 
@@ -58,7 +57,7 @@ class AuthController {
         email,
         username,
         password: hashedpassword,
-        role: role || "user",
+        role: "user",
         avatar,
         isVerified: false,
       });
@@ -160,20 +159,10 @@ class AuthController {
         {
           id: user._id,
           role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
         },
         JWT_SECRET,
         { expiresIn: "7d" }
       );
-
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-      });
 
       res.json({
         message: "Connexion réussie.",

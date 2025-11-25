@@ -53,12 +53,7 @@ export const registerSchema = Joi.object({
   confirmPassword: Joi.valid(Joi.ref("password")).required().messages({
     "any.only": "Les mots de passe ne correspondent pas.",
   }),
-  role: Joi.string()
-    .valid(...rolesEnum)
-    .required()
-    .messages({
-      "string.empty": "le role est requis.",
-    }),
+  role: Joi.forbidden(),
 });
 
 //Schema connexion utilisateur

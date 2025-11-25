@@ -1,5 +1,4 @@
 import Post from "../models/Post.model.js";
-import mongoose from "mongoose";
 
 class PostController {
   async createPost(req, res) {
@@ -156,12 +155,12 @@ class PostController {
         req.query;
 
       if (
-        typeof sportId !== "string" ||
-        typeof gender !== "string" ||
-        typeof level !== "string" ||
-        typeof locationCity !== "string" ||
-        typeof locationPC !== "string" ||
-        typeof title !== "string"
+        (sportId && typeof sportId !== "string") ||
+        (gender && typeof gender !== "string") ||
+        (level && typeof level !== "string") ||
+        (locationCity && typeof locationCity !== "string") ||
+        (locationPC && typeof locationPC !== "string") ||
+        (title && typeof title !== "string")
       )
         return res
           .status(400)

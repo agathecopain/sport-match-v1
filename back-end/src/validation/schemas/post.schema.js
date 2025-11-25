@@ -134,3 +134,30 @@ export const updatePostSchema = Joi.object({
   .messages({
     "object.min": "Au moins un champ doit être fourni pour la mise à jour.",
   });
+
+export const paramIdSchema = Joi.object({
+  postId: Joi.string().hex().length(24).required(),
+});
+
+export const getPostsQuerySchema = Joi.object({
+  sportId: Joi.string().hex().length(24).optional(),
+
+  gender: Joi.string()
+    .valid(...gendersEnum)
+    .optional(),
+
+  level: Joi.string()
+    .valid(...levelEnum)
+    .optional(),
+
+  title: Joi.string()
+    .max(50)
+    .pattern(/^[a-zA-Z0-9À-ÿ '-]*$/) // pas de caractères mongo
+    .optional(),
+
+  locationCity: Joi.string().max(50).optional(),
+
+  locationPC: Joi.string()
+    .pattern(/^[0-9]{5}$/)
+    .optional(),
+});
