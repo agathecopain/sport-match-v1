@@ -68,7 +68,7 @@ class AuthController {
         expiresIn: "7d",
       });
 
-      const verificationUrl = `${CLIENT_URL}auth/verify/${verificationToken}`;
+      const verificationUrl = `${CLIENT_URL}/auth/verify/${verificationToken}`;
 
       const fullName = newUser.firstName.concat(" ", newUser.lastName);
 
@@ -317,6 +317,16 @@ class AuthController {
         .status(500)
         .json({ message: "Erreur lors de l’envoi du lien de vérification." });
     }
+  }
+
+  async getUserByToken(req, res) {
+    return res.status(200).json({
+      user: req.user,
+    });
+  }
+  catch(error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur." });
   }
 }
 

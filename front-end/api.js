@@ -2,9 +2,12 @@ import axios from "axios";
 
 //création d'une nouvelle instance d'Axios
 const API = axios.create({
-  baseURL: import.meta.env.API_URL || "localhost:5000/auth",
-  withCredentials: true,
+  baseURL: import.meta.env.API_URL || "http://localhost:5000/",
+  withCredentials: true
 });
+
+
+API.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
 
 //ajout d'un intercepteur de réponse
 API.interceptors.response.use(

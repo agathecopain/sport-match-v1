@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import cookieParser from "cookie-parser";
@@ -7,6 +6,7 @@ import helmet from "helmet";
 import authRoutes from "./routes/auth.routes.js";
 import sportRoutes from "./routes/sport.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import cors from "cors"
 import csurf from "csurf";
 import mongoSanitize from "express-mongo-sanitize";
 import "./scripts/awakeRender.js";
@@ -15,6 +15,11 @@ const PORT = process.env.PORT || 5050;
 const app = express();
 
 connectDB();
+
+app.use(cors({
+  origin: "http://localhost:5173", // origine autorisée
+  credentials: true                // si vous utilisez cookies / tokens
+}));
 
 app.use(express.json());
 

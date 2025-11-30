@@ -1,6 +1,22 @@
 import Header from "../components/Header";
+import { useForm } from "react-hook-form";
+import API from "../../api.js";
 
-export default function SignInPage() {
+export default function PostCreatePage() {
+  function PostCreateForm() {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
+    const onSubmit = async (data) => {
+      try {
+        await API.post("/login", data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+  }
   return (
     <>
       <Header />

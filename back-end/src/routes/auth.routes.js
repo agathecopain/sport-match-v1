@@ -9,6 +9,7 @@ import {
 } from "../validation/schemas/user.schema.js";
 import { limiter } from "../middlewares/rateLimiter.middleware.js";
 import { uploadAvatar } from "../middlewares/upload.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -41,5 +42,7 @@ router.post(
 );
 
 router.post("/resend-verification", AuthController.resendVerificationEmail);
+
+router.get("/me",protect, AuthController.getUserByToken);
 
 export default router;
