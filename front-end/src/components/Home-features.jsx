@@ -27,7 +27,7 @@ export default function HomeFeatures() {
       <h2>SportsMatch, c'est quoi ?</h2>
       <div className="home-features-container">
         <p>Trouver des personnes avec qui faire du sport autour de chez soi</p>
-        <img src="../../public/hero-img.png" alt="SportsMatch" />
+        <img src="/hero-img.png" alt="SportsMatch" />
       </div>
       <h2>Annonces récentes</h2>
 
