@@ -27,7 +27,6 @@ export function AuthProvider({ children }) {
     });
     const token = res.data.token;
     const user = res.data.user;
-    console.log(res);
     localStorage.setItem("token", token);
     setUser(user);
     if (navigate) navigate(`/user/${user.username}`);
