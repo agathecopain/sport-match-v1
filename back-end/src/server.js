@@ -6,20 +6,33 @@ import helmet from "helmet";
 import authRoutes from "./routes/auth.routes.js";
 import sportRoutes from "./routes/sport.routes.js";
 import postRoutes from "./routes/post.routes.js";
-import cors from "cors"
+import cors from "cors";
 import csurf from "csurf";
 import mongoSanitize from "express-mongo-sanitize";
 import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://sport-match-v1-2uyz.onrender.com",
+];
 
 connectDB();
 
-app.use(cors({
-  origin: "http://localhost:5173", // origine autorisée
-  credentials: true                // si vous utilisez cookies / tokens
-}));
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Requête serveur à serveur
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // Origine autorisée
+    } else {
+      callback(new Error("Origine non autorisée par CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
@@ -34,14 +47,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use((req, _res, next) => {
-	Object.defineProperty(req, 'query', {
-		...Object.getOwnPropertyDescriptor(req, 'query'),
-		value: req.query,
-		writable: true,
-	})
+  Object.defineProperty(req, "query", {
+    ...Object.getOwnPropertyDescriptor(req, "query"),
+    value: req.query,
+    writable: true,
+  });
 
-	next()
-})
+  next();
+});
 app.use(mongoSanitize());
 
 /*---- Routes ----*/
