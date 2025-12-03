@@ -13,10 +13,7 @@ import "./scripts/awakeRender.js";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://sport-match-v1-2uyz.onrender.com",
-];
+const allowedOrigins = ["http://localhost:5173", process.env.CLIENT_URL];
 
 connectDB();
 

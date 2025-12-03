@@ -7,7 +7,10 @@ import crypto from "crypto";
 import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.CLIENT_URL
+    : process.env.LOCAL_HOST;
 
 class AuthController {
   async register(req, res) {
@@ -339,7 +342,7 @@ class AuthController {
           .status(404)
           .json({ message: "Impossible d'afficher l'utilisateur." });
       }
-      
+
       return res.status(200).json({ user });
     } catch (error) {
       console.error(error);
