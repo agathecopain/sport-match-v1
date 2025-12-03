@@ -3,10 +3,12 @@ import axios from "axios";
 //création d'une nouvelle instance d'Axios
 const API = axios.create({
   baseURL: import.meta.env.PROD
-    ? import.meta.env.API_URL
-    : import.meta.env.LOCAL_HOST,
+    ? import.meta.env.VITE_API_URL
+    : import.meta.env.VITE_LOCAL_HOST,
   withCredentials: true,
 });
+
+console.log("API URL =", import.meta.env.VITE_API_URL);
 
 API.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "access_token"
