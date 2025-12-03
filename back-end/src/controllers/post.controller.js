@@ -1,4 +1,5 @@
 import Post from "../models/Post.model.js";
+import User from "../models/User.model.js";
 
 class PostController {
   async createPost(req, res) {
@@ -208,6 +209,31 @@ class PostController {
     } catch (error) {
       console.error("GetById post error : ", error);
       res.status(500).json({ message: "Impossible d'afficher le post" });
+    }
+  }
+  async getPostByUsername(req, res) {
+    try {
+      const { username } = req.params;
+
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur introuvable." });
+      }
+      const posts = await Post.find({ author: user._id }).populate(
+        "author",
+        "username avatar"
+      );
+
+      if (!posts || posts.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "Impossible d'afficher les posts" });
+      }
+      
+      res.status(200).json(posts);
+    } catch (error) {
+      console.error("GetByUsername post error : ", error);
+      res.status(500).json({ message: "Impossible d'afficher les posts" });
     }
   }
   async getCity(req, res) {
