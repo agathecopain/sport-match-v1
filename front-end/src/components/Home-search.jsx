@@ -1,13 +1,18 @@
 export default function HomeSearch() {
-    return (
-      <div className="home-hero">
-        <h1>Trouvez un sport autour de chez moi</h1>
+  return (
+    <div className="home-hero">
+      <h1>Trouvez un sport autour de chez moi</h1>
+      <div className="home-hero-search">
         <div className="input-container">
           <div>
             <label htmlFor="address">
-              <span>Mon adresse</span>
+              <span>Mon ville</span>
             </label>
-            <input id="address" type="text" placeholder="Entrez votre adresse" />
+            <input
+              id="address"
+              type="text"
+              placeholder="Entrez votre ville ou code postal"
+            />
           </div>
           <div>
             <label htmlFor="sport">
@@ -23,7 +28,10 @@ export default function HomeSearch() {
             </select>
           </div>
         </div>
-        <a href="/search">Rechercher</a>
+        <a className="btn" href="/search">
+          Rechercher
+        </a>
       </div>
-    );
-  }
+    </div>
+  );
+}

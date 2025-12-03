@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import { useForm } from "react-hook-form";
-import API from "../../api.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context.jsx";
 
