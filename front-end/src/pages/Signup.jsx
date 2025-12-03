@@ -1,8 +1,10 @@
 import Header from "../components/Header";
 import { useForm } from "react-hook-form";
 import API from "../../api.js";
+import { useState } from "react";
 
 export default function SignUpPage() {
+  const [message, setMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -11,8 +13,12 @@ export default function SignUpPage() {
   const onSubmit = async (data) => {
     try {
       await API.post("auth/register", data);
+      return setMessage("Un email de vérification a été envoyé.");
     } catch (error) {
       console.log(error.message);
+      return setMessage(
+        "Impossible de créer votre compte. Réessayez plus tard ou contactez le support."
+      );
     }
   };
   return (
@@ -111,6 +117,7 @@ export default function SignUpPage() {
         <p>
           Vous avez déjà un compte ? <a href="/signin">Se connecter</a>
         </p>
+        {message && <span>{message}</span>}
       </div>
     </>
   );

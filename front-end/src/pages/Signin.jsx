@@ -1,8 +1,12 @@
 import Header from "../components/Header";
 import { useForm } from "react-hook-form";
 import API from "../../api.js";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth.context.jsx";
 
 export default function SignInPage() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -10,9 +14,9 @@ export default function SignInPage() {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      await API.post("auth/login", data);
+      login(data, navigate);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message); // set message par exemple
     }
   };
   return (

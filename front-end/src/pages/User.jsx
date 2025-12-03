@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import ResultCard from "../components/Result-card";
 
 export default function UserPage() {
+  
   return (
     <>
       <Header />

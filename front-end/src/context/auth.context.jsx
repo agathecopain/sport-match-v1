@@ -7,7 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Vérification de l'état de l'utilisateur
+  // au démarrage, vérification de l'état de l'utilisateur
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -21,18 +21,20 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Connexion
-  const login = async (credentials) => {
-    const res = await axios.post("/login", credentials, {
+  const login = async (credentials, navigate) => {
+    const res = await API.post("auth/login", credentials, {
       withCredentials: true,
     });
     const token = res.data.token;
-    localStorage.setItem(`Bearer: ${token}`)
-    setUser(res.data.user);
+    const user = res.data.user;
+    localStorage.setItem("token", token);
+    setUser(user);
+    if (navigate) navigate(`/user/${user.username}`);
   };
 
   // Déconnexion
   const logout = async () => {
-    await API.post("/logout");
+    await API.post("auth/logout");
     setUser(null);
   };
 
