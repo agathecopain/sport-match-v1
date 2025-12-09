@@ -21,12 +21,12 @@ export default function SignInPage() {
   return (
     <>
       <Header />
-      <div>
+      <div className="auth-container">
         <h1>Se connecter</h1>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
           {/* Email */}
-          <div>
+          <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -37,7 +37,7 @@ export default function SignInPage() {
           </div>
 
           {/* Mot de passe */}
-          <div>
+          <div className="form-group">
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
@@ -47,7 +47,7 @@ export default function SignInPage() {
             {errors.password && <span>{errors.password.message}</span>}
           </div>
 
-          <button type="submit">Se connecter</button>
+          <button className="btn" type="submit">Se connecter</button>
         </form>
 
         <p>

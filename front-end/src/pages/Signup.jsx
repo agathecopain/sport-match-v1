@@ -25,11 +25,11 @@ export default function SignUpPage() {
   return (
     <>
       <Header />
-      <div>
+      <div className="auth-container">
         <h1>S'inscrire</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
           {/* Prénom */}
-          <div>
+          <div className="form-group">
             <label htmlFor="firstName">Prénom</label>
             <input
               type="text"
@@ -40,7 +40,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Nom */}
-          <div>
+          <div className="form-group">
             <label htmlFor="lastName">Nom</label>
             <input
               type="text"
@@ -51,7 +51,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Pseudo */}
-          <div>
+          <div className="form-group">
             <label htmlFor="username">Pseudo</label>
             <input
               type="text"
@@ -62,7 +62,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Genre */}
-          <div>
+          <div className="form-group">
             <label htmlFor="gender">Genre</label>
             <select
               id="gender"
@@ -76,7 +76,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Email */}
-          <div>
+          <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -87,7 +87,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Mot de passe */}
-          <div>
+          <div className="form-group">
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
@@ -98,7 +98,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Confirmation mot de passe */}
-          <div>
+          <div className="form-group">
             <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
             <input
               type="password"
@@ -112,7 +112,7 @@ export default function SignUpPage() {
             )}
           </div>
 
-          <button type="submit">S'inscrire</button>
+          <button className="btn" type="submit">S'inscrire</button>
         </form>
 
         <p>
