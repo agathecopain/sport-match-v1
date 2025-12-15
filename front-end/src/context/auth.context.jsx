@@ -11,8 +11,12 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await API.get("/auth/me");
-        setUser(res.data);
+        if (localStorage.getItem("access_token")) {
+          const res = await API.get("/auth/me");
+          setUser(res.data);
+        } else {
+          setUser(null);
+        }
       } catch {
         setUser(null);
       }

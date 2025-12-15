@@ -9,11 +9,9 @@ export default function HomeFeatures() {
       try {
         const now = new Date();
         const res = await API.get("/post/");
-        console.log(res.data);
         const latestPosts = res.data
           .filter((p) => new Date(p.createdAt) <= now)
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        console.log(latestPosts);
         setPosts(latestPosts);
       } catch (error) {
         setPosts([]);

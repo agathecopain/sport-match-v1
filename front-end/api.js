@@ -8,8 +8,6 @@ const API = axios.create({
   withCredentials: true,
 });
 
-console.log("API URL =", import.meta.env.VITE_API_URL);
-
 API.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "access_token"
 )}`;
