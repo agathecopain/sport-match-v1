@@ -1,32 +1,31 @@
-import nodemailer from "nodemailer";
+import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 import "dotenv/config";
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: 587,
-  secure: false,
-  auth: { user: process.env.BREVO_USER, pass: process.env.SMTP_KEY },
-});
-
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("SMTP connection failed", error);
-  } else {
-    console.log("SMTP connection OK", success);
-  }
-});
 
 export default async function sendEmail({ to, subject, html }) {
   try {
-    const info = await transporter.sendMail({
-      from: `"Sport Match" <${process.env.GMAIL_USER}>`,
-      to,
-      subject,
-      html,
+    let emailAPI = new TransactionalEmailsApi();
+    emailAPI.authentications.apiKey.apiKey = process.env.SMTP_API_KEY;
+
+    let message = new SendSmtpEmail();
+    message.subject = subject;
+    message.htmlContent = html;
+    message.sender = {
+      name: "Sport Match",
+      email: process.env.GMAIL_USER,
+    };
+    message.to = [
+      {
+        email: to,
+        name: to,
+      },
+    ];
+
+    await emailAPI.sendTransacEmail(message).then((resAPI) => {
+      console.log(JSON.stringify(resAPI.body));
+      return resAPI;
     });
-    console.log("Email envoyé : ", info.messageId);
   } catch (error) {
-    console.error("Erreur envoi email : ", error);
-    throw new Error("Erreur lors de l'envoi de l'email");
+    console.error("Error sending email:", error);
+    throw new Error("Error sending email");
   }
 }

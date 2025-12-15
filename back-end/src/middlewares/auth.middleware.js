@@ -31,7 +31,7 @@ export const requireRole = (role) => {
   return (req, res, next) => {
     if (!req.user)
       return res
-        .status(403)
+        .status(401)
         .json({ message: "Accès refusé : non authentifié" });
     if (req.user.role !== role) {
       return res
@@ -48,7 +48,7 @@ export const requireRoles = (roles) => {
     if (!roles) roles = [];
     if (!req.user)
       return res
-        .status(403)
+        .status(401)
         .json({ message: "Accès refusé : non authentifié" });
     if (!roles.includes(req.user.role)) {
       return res

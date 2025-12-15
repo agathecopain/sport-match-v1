@@ -78,31 +78,14 @@ class AuthController {
       let emailAPI = new TransactionalEmailsApi();
       emailAPI.authentications.apiKey.apiKey = process.env.SMTP_API_KEY;
 
-      let message = new SendSmtpEmail();
-      message.subject = "Vérifiez votre compte";
-      (message.htmlContent = `Bonjour ${newUser.firstName},<br><br>Merci de vérifier votre compte en cliquant sur ce lien : <a href="${verificationUrl}">Vérifier mon compte</a><br><br>Ce lien est valable 7 jours.`),
-        (message.sender = {
-          name: "Sport Match",
-          email: process.env.GMAIL_USER,
-        });
-      message.to = [
-        {
-          email: newUser.email,
-          name: fullName,
-        },
-      ];
-
-      await emailAPI
-        .sendTransacEmail(message)
-        .then((resAPI) => {
-          console.log(JSON.stringify(resAPI.body));
-          return res.status(201).json({
-            message: "Utilisateur créé. Un email de vérification a été envoyé.",
-          });
-        })
-        .catch((err) => {
-          console.error("Error sending email:", err.body);
-        });
+      await sendEmail({
+        to: newUser.email,
+        subject: "Vérifiez votre compte",
+        html: `Bonjour ${newUser.firstName},<br><br>Merci de vérifier votre compte en cliquant sur ce lien : <a href="${verificationUrl}">Vérifier mon compte</a><br><br>Ce lien est valable 7 jours.`,
+      });
+      res.status(201).json({
+        message: "Utilisateur créé. Un email de vérification a été envoyé.",
+      });
     } catch (error) {
       console.error("Register error : ", error);
       res
@@ -326,10 +309,6 @@ class AuthController {
     return res.status(200).json({
       user: req.user,
     });
-  }
-  catch(error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur serveur." });
   }
 
   async getUserByUsername(req, res) {
