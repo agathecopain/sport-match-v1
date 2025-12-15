@@ -15,7 +15,7 @@ export const protect = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    if (!req.user)
+    if (!decoded.id)
       return res
         .status(401)
         .json({ message: "Utilisateur non trouvé ou supprimé" });

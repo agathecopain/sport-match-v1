@@ -38,8 +38,11 @@ export function AuthProvider({ children }) {
 
   // Déconnexion
   const logout = async () => {
-    await API.post("auth/logout");
-    setUser(null);
+    const res = await API.post("auth/logout");
+    if (res?.data?.success) {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   return (
