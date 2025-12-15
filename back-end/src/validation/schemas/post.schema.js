@@ -13,6 +13,14 @@ export const createPostSchema = Joi.object({
       "any.only": `Le type doit être parmi : ${typesEnum.join(", ")}.`,
     }),
 
+  author: Joi.string()
+    .pattern(/^[0-9a-fA-F]{24}$/)
+    .required()
+    .messages({
+      "string.pattern.base": "L’identifiant du user est invalide.",
+      "any.required": "Le user est requis.",
+    }),
+
   title: Joi.string().min(2).max(100).required().messages({
     "string.empty": "Le titre est requis.",
     "string.min": "Le titre doit contenir au moins 2 caractères.",
